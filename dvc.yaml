@@ -1,0 +1,27 @@
+stages:
+  preprocess:
+    cmd: python src/preprocess.py
+    deps:
+    - data/churn_dataset.csv
+    - src/preprocess.py
+    outs:
+    - data/prepared
+  train:
+    cmd: python src/train.py
+    deps:
+    - data/prepared
+    - src/train.py
+    params:
+    - train.model_type
+    - train.hyperparams
+    outs:
+    - models/model.pkl
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+    - data/prepared
+    - models/model.pkl
+    - src/evaluate.py
+    metrics:
+    - metrics/accuracy.metric
+    - metrics/confusion_matrix.png
